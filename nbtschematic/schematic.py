@@ -1,3 +1,4 @@
+# coding=UTF-8
 """ Defines an nbtlib schema for schematic files """
 from typing import Tuple
 import enum
