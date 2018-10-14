@@ -92,13 +92,11 @@ class SchematicFile(nbt.File, Schematic):
         ``(n_y, n_z, n_z)``.
         """
 
-        self.root['Blocks'] = nbt.ByteArray(
-            np.zeros(shape, dtype=np.uint8, order='C'))
-        self.root['Data'] = nbt.ByteArray(
-            np.zeros(shape, dtype=np.uint8, order='C'))
         self.root['Height'] = nbt.Short(shape[0])
         self.root['Length'] = nbt.Short(shape[1])
         self.root['Width'] = nbt.Short(shape[2])
+        self.blocks = np.zeros(shape, dtype=np.uint8, order='C')
+        self.data = np.zeros(shape, dtype=np.uint8, order='C')
 
     @classmethod
     def load(cls, filename, gzipped=True, byteorder='big') -> 'SchematicFile':
