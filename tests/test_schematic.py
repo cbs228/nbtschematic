@@ -3,7 +3,7 @@ import os
 import io
 import gzip
 
-from nbtschematic import SchematicFile, Entity, BlockEntity
+from nbtschematic import SchematicFile, Entity, BlockEntity, Material
 
 COUNTING_C = \
     np.asarray(range(0, 27), dtype=np.uint8, order='C'). \
@@ -66,6 +66,7 @@ def test_shape_mismatch():
 
 def test_load_verify(datadir):
     sf = SchematicFile.load(os.path.join(datadir, 'simple.schematic'))
+    assert (sf.material == Material.Alpha)
     assert (np.all(sf.shape == (4, 4, 4)))
 
     # all blocks are air, except on main diagonal
@@ -85,6 +86,12 @@ def test_load_verify(datadir):
     assert len(sf.blockentities) == 1
     assert sf.blockentities[0]['id'] == 'minecraft:chest'
     assert len(sf.blockentities[0]['Items']) == 1
+
+
+def test_set_materials():
+    sf = SchematicFile()
+    sf.material = Material.Classic
+    assert (sf.material == Material.Classic)
 
 
 def test_set_entities():

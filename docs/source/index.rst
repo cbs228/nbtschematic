@@ -19,6 +19,12 @@ Schematic Components
 .. autoclass:: nbtschematic.Schematic
    :members:
 
+Material
+~~~~~~~~
+
+.. autoclass:: nbtschematic.Material
+   :members:
+
 Entities
 ~~~~~~~~
 

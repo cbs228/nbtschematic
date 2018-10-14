@@ -1,5 +1,6 @@
 """ Defines an nbtlib schema for schematic files """
 from typing import Tuple
+import enum
 import numpy as np
 import nbtlib as nbt
 
@@ -65,9 +66,19 @@ class Schematic(nbt.CompoundSchema):
     }
 
 
-MATERIAL_CLASSIC = "Classic"
-MATERIAL_POCKET = "Pocket"
-MATERIAL_ALPHA = "Alpha"
+class Material(enum.Enum):
+    """
+    Block Materials
+
+    This enumeration indicates whether the block IDs in this schematic
+    are to be taken from `Classic`, `Pocket`, or `Alpha` versions.
+    Versions beyond `Alpha`—including `Beta` and stable builds—share a
+    compatible set of block IDs. `Alpha` is the default for all
+    newly-created schematics.
+    """
+    Classic = "Classic"
+    Pocket = "Pocket"
+    Alpha = "Alpha"
 
 
 class SchematicFile(nbt.File, Schematic):
@@ -95,7 +106,7 @@ class SchematicFile(nbt.File, Schematic):
         self.gzipped = True
         self.byteorder = 'big'
         self.root_name = 'Schematic'
-        self.root['Materials'] = MATERIAL_ALPHA
+        self.root['Materials'] = Material.Alpha
         self.resize(shape)
         if blocks is not None:
             self.blocks = blocks
@@ -135,6 +146,25 @@ class SchematicFile(nbt.File, Schematic):
         """
         return super().load(filename=filename,
                             gzipped=gzipped, byteorder=byteorder)
+
+    @property
+    def material(self) -> Material:
+        """
+        Block materials used by this schematic
+
+        This enumeration indicates whether the block IDs in this schematic
+        are to be taken from `Classic`, `Pocket`, or `Alpha` versions.
+        Versions beyond `Alpha`—including `Beta` and stable builds—share a
+        compatible set of block IDs. `Alpha` is the default for all
+        newly-created schematics.
+
+        :return: Enumerated Material type
+        """
+        return Material[self.root['Materials']]
+
+    @material.setter
+    def material(self, value: Material = Material.Alpha):
+        self.root['Materials'] = value.value
 
     @property
     def shape(self) -> Tuple[nbt.Short, nbt.Short, nbt.Short]:
