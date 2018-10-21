@@ -33,10 +33,26 @@ def test_blocks_from_numpy():
                   np.transpose(COUNTING_F).reshape(-1))
 
 
-def test_init():
+def test_init_writeread(datadir):
     sf = SchematicFile(shape=(3, 3, 3), blocks=COUNTING_C, data=COUNTING_C)
     assert np.all(np.asarray(sf.blocks) == COUNTING_C)
     assert np.all(np.asarray(sf.data) == COUNTING_C)
+    outbuf = io.BytesIO()
+    outbuf.name = 'none'
+    sf.write(outbuf)
+    outbuf.seek(0, 0)
+
+    # Can we read it from bytes?
+    sf2 = SchematicFile.from_buffer(outbuf)
+    assert np.all(np.asarray(sf2.shape) == (3, 3, 3))
+    assert np.all(np.asarray(sf2.blocks) == COUNTING_C)
+    assert np.all(np.asarray(sf2.data) == COUNTING_C)
+
+    # Does it match our existing schematic file?
+    test_file = os.path.join(datadir, 'counting.schematic')
+    with gzip.open(test_file, 'rb') as fd:
+        in_bytes = fd.read()
+    assert np.all(in_bytes == outbuf.getvalue())
 
 
 def test_resize():
