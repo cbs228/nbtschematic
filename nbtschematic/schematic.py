@@ -67,6 +67,15 @@ class Schematic(nbt.CompoundSchema):
     }
 
 
+class SchematicFileRoot(nbt.CompoundSchema):
+    """
+    Describes the root element of a schematic file
+    """
+    schema = {
+        'Schematic': Schematic
+    }
+
+
 class Material(enum.Enum):
     """
     Block Materials
@@ -82,7 +91,7 @@ class Material(enum.Enum):
     Alpha = "Alpha"
 
 
-class SchematicFile(nbt.File, Schematic):
+class SchematicFile(nbt.File, SchematicFileRoot):
     """
     Schematic File
 
@@ -103,16 +112,18 @@ class SchematicFile(nbt.File, Schematic):
 
     def __init__(self, shape: Tuple[int, int, int] = (1, 1, 1),
                  blocks=None, data=None):
-        super().__init__({'': {}})
+        super().__init__({'Schematic': {}})
         self.gzipped = True
         self.byteorder = 'big'
         self.root_name = 'Schematic'
-        self.root['Materials'] = Material.Alpha
+        self.material = Material.Alpha
         self.resize(shape)
         if blocks is not None:
             self.blocks = blocks
         if data is not None:
             self.data = data
+        self.entities = nbt.List()
+        self.blockentities = nbt.List()
 
     def resize(self, shape: Tuple[int, int, int]) -> None:
         """

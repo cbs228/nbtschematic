@@ -12,3 +12,4 @@ from .schematic import BlockEntity      # noqa:F401
 from .schematic import Schematic        # noqa:F401
 from .schematic import SchematicFile    # noqa:F401
 from .schematic import Material         # noqa:F401
+from .schematic import SchematicFileRoot  # noqa:F401

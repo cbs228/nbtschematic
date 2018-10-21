@@ -36,3 +36,9 @@ Block Entities
 
 .. autoclass:: nbtschematic.BlockEntity
    :members:
+
+Schematic Root
+~~~~~~~~~~~~~~
+
+.. autoclass:: nbtschematic.SchematicFileRoot
+   :members:
