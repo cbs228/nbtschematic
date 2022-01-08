@@ -43,7 +43,7 @@ def test_init_writeread(datadir):
     outbuf.seek(0, 0)
 
     # Can we read it from bytes?
-    sf2 = SchematicFile.from_buffer(outbuf)
+    sf2 = SchematicFile.from_fileobj(outbuf)
     assert np.all(np.asarray(sf2.shape) == (3, 3, 3))
     assert np.all(np.asarray(sf2.blocks) == COUNTING_C)
     assert np.all(np.asarray(sf2.data) == COUNTING_C)
