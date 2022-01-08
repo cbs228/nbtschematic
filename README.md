@@ -6,7 +6,9 @@
 
 ## Installation
 
-Python 3.6 or higher is required.
+Python 3.8 or higher is required. You should probably create a new
+[virtual environment](https://docs.python.org/3/tutorial/venv.html) before you
+install. Once you have activated your virtual environment, run
 
 ```bash
 pip3 install nbtschematic

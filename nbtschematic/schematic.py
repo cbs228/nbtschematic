@@ -147,7 +147,7 @@ class SchematicFile(nbt.File, SchematicFileRoot):
         Load a schematic file from disk
 
         If the schematic file is already loaded into memory, use the
-        :meth:`~from_buffer()` method instead.
+        :meth:`~from_fileobj()` method instead.
 
         :param filename: Path to a schematic file on disk.
         :param gzipped: Schematic files are always stored gzipped. This option
@@ -203,8 +203,8 @@ class SchematicFile(nbt.File, SchematicFileRoot):
     @blocks.setter
     def blocks(self, value):
         if not np.all(value.shape == self.shape):
-            raise ValueError("Input shape %s does not match schematic shape %s"
-                             % (value.shape, self.shape))
+            raise ValueError(f"Input shape {value.shape} does not match "
+                             f"schematic shape {self.shape}")
 
         self.root['Blocks'] = nbt.ByteArray(value.reshape(-1))
 
@@ -225,8 +225,8 @@ class SchematicFile(nbt.File, SchematicFileRoot):
     @data.setter
     def data(self, value):
         if not np.all(value.shape == self.shape):
-            raise ValueError("Input shape %s does not match schematic shape %s"
-                             % (value.shape, self.shape))
+            raise ValueError(f"Input shape {value.shape} does not match "
+                             f"schematic shape {self.shape}")
 
         self.root['Data'] = nbt.ByteArray(value.reshape(-1))
 
